@@ -1,0 +1,75 @@
+﻿@model JobApplication.Models.ViewModel
+
+<br />
+<h2 class="text-info">@(Model.Candidate.CandidateID !=0 ? "Edit" : "Create") candidate</h2>
+<br />
+
+<div class="border container" style="padding:30px;">
+    <form method="post">
+        @if (Model.Candidate.CandidateID != 0)
+        {
+            <input type="hidden" asp-for="Candidate.CandidateID" />
+        }
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+        <div class="form-group row">
+
+            <div class="col-2">
+                <label asp-for="Candidate.NameSurename">First and last name:</label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Candidate.NameSurename" class="form-control" />
+                <span asp-validation-for="Candidate.NameSurename" class="text-danger"></span>
+            </div>
+            
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Candidate.Email">Email address:</label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Candidate.Email" class="form-control" />
+                <span asp-validation-for="Candidate.Email" class="text-danger"></span>
+            </div>
+        </div>
+
+            <label style="padding-bottom: 1%;">Avaliable positions:</label>
+            <br />
+            @for (int i = 0; i < Model.PositionTypesCheckBoxes.Count; i++)
+            {
+                <div class="input-group col-8" style="padding-left: 0%">
+                    <div class="col-1" style="padding:0%;">
+                        <input type="checkbox" aria-label="Checkbox for following text input" asp-for="@Model.PositionTypesCheckBoxes[i].IsActive">
+                    </div>
+                    <div class="col-11" style="padding:0%">
+                        <label asp-for="PositionTypesCheckBoxes[i].IsActive">@Model.PositionTypesCheckBoxes[i].Display</label>
+                    </div>
+                    <input type="hidden" asp-for="@Model.PositionTypesCheckBoxes[i].PositionID " />
+                    <input type="hidden" asp-for="@Model.PositionTypesCheckBoxes[i].CompanyID " />
+                    <input type="hidden" asp-for="@Model.PositionTypesCheckBoxes[i].Display " />
+                </div>
+            }
+            @if (ViewBag.Message != null)
+            {
+                <span class="text-danger">@ViewBag.Message</span>
+            }
+            <span asp-validation-for="@Model.PositionTypesCheckBoxes"></span>
+
+            <br /><br />
+
+            <div class="form-group row">
+                <div class="col-3 offset-2">
+                    <button type="submit" class="btn btn-primary form-control">
+                        @(Model.Candidate.CandidateID != 0 ? "Update" : "Create")
+                    </button>
+                </div>
+                <div class="col-3">
+                    <a asp-action="Index" class="btn btn-success form-control">Back to list</a>
+                </div>
+            </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
